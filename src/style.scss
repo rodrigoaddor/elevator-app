@@ -1,4 +1,5 @@
 @use 'normalize.css/normalize.css';
+@use 'milligram/src/milligram';
 
 :root {
   --building-color: #e0f2f1;
@@ -77,13 +78,14 @@
 
   display: flex;
   flex-wrap: wrap-reverse;
-  justify-content: space-evenly;
+  justify-content: stretch;
 
   .button {
     &:first-child {
       flex-basis: 100%;
     }
 
-    flex-basis: 50%;
+    flex-basis: 40%;
+    margin: 5% 5%;
   }
 }

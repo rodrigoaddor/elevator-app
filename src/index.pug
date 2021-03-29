@@ -26,6 +26,6 @@ html(lang='en')
       
       .buttons
         each _, i in Array(floors)
-          button.button(data-floor=i) #{i == 0 ? 'T' : i }
+          button.button.button-outline(data-floor=i) #{i == 0 ? 'T' : i }
 
     script(src='./main.ts')
