@@ -1,8 +1,31 @@
 doctype html
-html(lang="en")
+html(lang='en')
   head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
     title Elevator App
+
+    style.
+      :root {
+        --floors: #{floors}
+      }
+    
+    script.
+      const floors = #{floors}
+
+    link(rel='stylesheet' href='./style.scss')
+
   body
-    script(src="./index.ts") 
+    .container
+      .building
+        .elevator-shaft
+          #elevator
+        .floors
+          each _ in Array(floors)
+            .floor
+      
+      .buttons
+        each _, i in Array(floors)
+          button.button(data-floor=i) #{i == 0 ? 'T' : i }
+
+    script(src='./main.ts')

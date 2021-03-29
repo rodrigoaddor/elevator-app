@@ -1,0 +1,89 @@
+@use 'normalize.css/normalize.css';
+
+:root {
+  --building-color: #e0f2f1;
+  --building-border: #000;
+  --building-width: 300px;
+  --building-height: 500px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  display: grid;
+
+  grid-template-columns: 25% auto 25%;
+  grid-template-rows: 25% auto;
+  grid-template-areas:
+    'buttons building .'
+    '. building .';
+
+  justify-items: center;
+
+  width: 100vw;
+  height: 100vh;
+}
+
+.building {
+  grid-area: building;
+
+  display: grid;
+  grid-template: 1fr / 1fr;
+  place-items: center;
+  justify-items: stretch;
+  align-items: stretch;
+
+  & > * {
+    grid-column: 1 / 1;
+    grid-row: 1 / 1;
+  }
+
+  width: 300px;
+  height: var(--building-height);
+  background-color: var(--building-color);
+  border: 1px solid var(--building-border);
+
+  .floors {
+    display: flex;
+    flex-direction: column-reverse;
+    height: 100%;
+
+    .floor {
+      border-bottom: 10px solid #888;
+      flex-grow: 1;
+    }
+  }
+
+  .elevator-shaft {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+
+    #elevator {
+      z-index: 0;
+      width: 50px;
+      height: calc(var(--building-height) / var(--floors) - 10px);
+      margin-bottom: 10px;
+
+      background-color: red;
+    }
+  }
+}
+
+.buttons {
+  grid-area: buttons;
+
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: space-evenly;
+
+  .button {
+    &:first-child {
+      flex-basis: 100%;
+    }
+
+    flex-basis: 50%;
+  }
+}
