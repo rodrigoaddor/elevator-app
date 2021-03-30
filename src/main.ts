@@ -36,14 +36,12 @@ const work = async () => {
     const floor = queue[0]
     const currentFloor = parseInt(elevator.dataset.floor ?? '0')
 
-    console.log(`Going to ${floor}`)
-
     elevator.dataset.floor = `${floor}`
     await elevator.animate([{ transform: `translateY(${-floorHeight * currentFloor}px)` }, { transform: `translateY(${-floorHeight * floor}px)` }], {
       duration: 500 * Math.abs(floor - currentFloor),
-      fill: 'forwards',
-      easing: 'ease-in-out',
+      // easing: 'ease-in-out',
     }).finished
+    elevator.style.transform = `translateY(${-floorHeight * floor}px)`
 
     queue.shift()
     document.querySelectorAll(`button[data-floor="${floor}"]`).forEach((button) => button.classList.add('button-outline'))
@@ -51,6 +49,5 @@ const work = async () => {
     await delay(waitTime)
   } while (queue.length > 0)
 
-  console.log('Done?' + queue)
   working = false
 }

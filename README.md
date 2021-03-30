@@ -1,5 +1,7 @@
 # Elevator
 
+### [Available on Github Pages](https://rodrigoaddor.github.io/elevator-app/)
+
 **Tier:** 3-Advanced
 
 It's tough to think of a world without elevators. Especially if you have to
@@ -28,16 +30,16 @@ button.
 an elevator shaft, the elevator, and an up button on the first floor, up and 
 down buttons on the second and third floors, and a down button on the fourth
 floor.
--   [ ] User can see the elevator control panel with a button for each of the
+-   [X] User can see the elevator control panel with a button for each of the
 floors to the side of the diagram.
 -   [ ] User can click the up and down button on any floor to call the 
 elevator.
 -   [ ] User can expect that clicking the up and down buttons on any floor
 to request the elevator will be queued and serviced in the sequence they were
 clicked.
--   [ ] User can see the elevator move up and down the shaft to the floor it
+-   [X] User can see the elevator move up and down the shaft to the floor it
 was called to.
--   [ ] User can click the elevator control panel to select the floor it
+-   [X] User can click the elevator control panel to select the floor it
 should travel to.
 -   [ ] User can expect the elevator to pause for 5 seconds waiting for a
 floor button on the control panel to be clicked. If a floor button isn't
