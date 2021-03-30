@@ -26,25 +26,25 @@ button.
 
 ## User Stories
 
--   [ ] User can see a cross section diagram of a building with four floors,
+-   [X] User can see a cross section diagram of a building with four floors,
 an elevator shaft, the elevator, and an up button on the first floor, up and 
 down buttons on the second and third floors, and a down button on the fourth
 floor.
 -   [X] User can see the elevator control panel with a button for each of the
 floors to the side of the diagram.
--   [ ] User can click the up and down button on any floor to call the 
+-   [X] User can click the up and down button on any floor to call the 
 elevator.
--   [ ] User can expect that clicking the up and down buttons on any floor
+-   [X] User can expect that clicking the up and down buttons on any floor
 to request the elevator will be queued and serviced in the sequence they were
 clicked.
 -   [X] User can see the elevator move up and down the shaft to the floor it
 was called to.
 -   [X] User can click the elevator control panel to select the floor it
 should travel to.
--   [ ] User can expect the elevator to pause for 5 seconds waiting for a
+-   [X] User can expect the elevator to pause for 5 seconds waiting for a
 floor button on the control panel to be clicked. If a floor button isn't
 clicked within that time the elevator will process the next call request.
--   [ ] User can expect the elevator to return to the first floor when there
+-   [X] User can expect the elevator to return to the first floor when there
 are no requests to process.
 
 ## Bonus features

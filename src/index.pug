@@ -20,15 +20,19 @@ html(lang='en')
       .header
         h3 Elevator App
         nav
-          a(href="https://github.com/rodrigoaddor/elevator-app") Github
+          a(href="https://github.com/rodrigoaddor/elevator-app")
+            i.fab.fa-github.fa-lg
+            span.icon-text Github
 
       .building
         .elevator-shaft
           #elevator
         .floors
-          each _ in Array(floors)
+          each _, i in Array(floors)
             .floor
-      
+              button.icon-button.fa-stack(data-floor=i)
+                i.fas.fa-square.fa-stack-2x.fa-inverse
+                i.fas.fa-stack-1x(class=i == 0 ? 'fa-sort-up' : i == floors - 1 ? 'fa-sort-down' : 'fa-sort')   
       .buttons
         each _, i in Array(floors)
           button.button.button-outline(data-floor=i) #{i == 0 ? 'T' : i }

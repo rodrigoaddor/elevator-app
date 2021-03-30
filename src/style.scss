@@ -6,6 +6,8 @@
   --building-border: #000;
   --building-width: 300px;
   --building-height: 500px;
+
+  --button-color: #9b4dca;
 }
 
 * {
@@ -24,7 +26,7 @@
   grid-template-areas:
     'header header header header header'
     '. buttons building . .';
-    
+
   row-gap: 2rem;
   justify-items: center;
 
@@ -65,9 +67,7 @@
 
   display: grid;
   grid-template: 1fr / 1fr;
-  place-items: center;
-  justify-items: stretch;  
-  align-items: stretch;
+  place-items: stretch;
 
   & > * {
     grid-column: 1 / 1;
@@ -87,6 +87,9 @@
     .floor {
       border-bottom: 10px solid #888;
       flex-grow: 1;
+
+      display: flex;
+      place-items: center;
     }
   }
 
@@ -122,4 +125,47 @@
     flex-basis: 40%;
     margin: 5%;
   }
+}
+
+button:hover {
+  border-color: var(--button-color) !important;
+  color: white !important;
+  background-color: rgba(#9b4dca, 0.5) !important;
+
+  &:not(.button-outline) {
+  background-color: #9b4dca !important;
+  }
+
+  &.icon-button {
+    background-color: initial !important;
+    color: rgba(#9b4dca, 0.5) !important;
+  }
+}
+
+button:focus {
+  border-color: var(--button-color) !important;
+  color: white !important;
+  background-color: #9b4dca !important;
+
+  &.icon-button {
+    background-color: initial !important;
+    color: #9b4dca !important;
+  }
+}
+
+.icon-button {
+  border: none;
+  background: initial;
+  color: var(--button-color) !important;
+  padding: 0;
+  margin: 0;
+  font-size: initial;
+
+  &.active {
+    background-color: var(--button-color);
+  }
+}
+
+.icon-text {
+  margin-left: 1rem;
 }
