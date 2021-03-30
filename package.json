@@ -8,8 +8,7 @@
   "private": true,
   "scripts": {
     "dev": "parcel ./src/index.pug",
-    "build": "parcel build ./src/index.pug",
-    "build-gh": "yarn build --public-url ./"
+    "build": "parcel build ./src/index.pug --public-url ./ --no-minify"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.5",
