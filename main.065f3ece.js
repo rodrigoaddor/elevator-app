@@ -13095,12 +13095,12 @@ const randomOccupants = ms => {
 
 const carrying = () => {
   const user = document.querySelector('#elevator > div:not(.hide) > :last-child');
-  return user ? +user.innerHTML : undefined;
+  return user ? +(user.innerHTML == 'T' ? 0 : user.innerHTML) : undefined;
 };
 
 const floorUser = floor => {
   const user = document.querySelector(`.floor:nth-child(${floor + 1}) > div:not(.hide) > :last-child`);
-  return user ? +user.innerHTML : undefined;
+  return user ? +(user.innerHTML == 'T' ? 0 : user.innerHTML) : undefined;
 };
 
 window.carrying = carrying;
@@ -13127,4 +13127,4 @@ muteButton === null || muteButton === void 0 ? void 0 : muteButton.addEventListe
 });
 muteButton === null || muteButton === void 0 ? void 0 : (_muteButton$children$ = muteButton.children.item(0)) === null || _muteButton$children$ === void 0 ? void 0 : _muteButton$children$.classList.add(localStorage.getItem('muted') == 'false' ? 'fa-volume-mute' : 'fa-volume-up');
 },{"./utils":"UnXq","./fontawesome":"opIx","./resources/bell.mp3":"dv5g","./resources/warn.mp3":"cTXt"}]},{},["ZCfc"], null)
-//# sourceMappingURL=main.62ea2896.js.map
+//# sourceMappingURL=main.065f3ece.js.map
