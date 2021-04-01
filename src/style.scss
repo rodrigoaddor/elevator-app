@@ -59,6 +59,10 @@
     display: flex;
 
     justify-content: flex-end;
+
+    & > * {
+      margin-left: 3rem;
+    }
   }
 }
 
@@ -133,7 +137,7 @@ button:hover {
   background-color: rgba(#9b4dca, 0.5) !important;
 
   &:not(.button-outline) {
-  background-color: #9b4dca !important;
+    background-color: #9b4dca !important;
   }
 
   &.icon-button {
@@ -142,15 +146,9 @@ button:hover {
   }
 }
 
-button:focus {
-  border-color: var(--button-color) !important;
-  color: white !important;
-  background-color: #9b4dca !important;
-
-  &.icon-button {
-    background-color: initial !important;
-    color: #9b4dca !important;
-  }
+button.icon-button:focus {
+  background-color: initial !important;
+  color: #9b4dca !important;
 }
 
 .icon-button {

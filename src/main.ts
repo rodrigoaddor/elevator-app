@@ -1,12 +1,25 @@
 import { delay } from './utils'
 import './fontawesome'
 
+/* Sounds */
+
+// @ts-expect-error ParcelJS custom Import
+import bellUrl from './resources/bell.mp3'
+// @ts-expect-error ParcelJS custom Import
+import warnUrl from './resources/warn.mp3'
+
+const bell = new Audio(bellUrl)
+const warn = new Audio(warnUrl)
+
+/*  */
+
 declare var floors: number
 const buildingHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--building-height'))
 const floorHeight = buildingHeight / floors
 
 const waitTime = 1e3
 const returnTime = 5e3
+const maxQueue = 3
 
 const elevator = document.getElementById('elevator') as HTMLDivElement
 const queue: number[] = []
@@ -25,9 +38,17 @@ document.querySelectorAll('button[data-floor]').forEach((element) => {
       const currentFloor = parseInt(elevator.dataset.floor ?? '0')
 
       if (currentFloor != floor && !queue.includes(floor)) {
-        queue.push(floor)
-        document.querySelectorAll(`button[data-floor="${floor}"]`).forEach(toggleButtonClasses)
-        work()
+        if (queue.length + 1 <= maxQueue) {
+          queue.push(floor)
+          document.querySelectorAll(`button[data-floor="${floor}"]`).forEach(toggleButtonClasses)
+          work()
+        } else {
+          if (['true', null].includes(localStorage.getItem('muted'))) {
+            warn.currentTime = 0
+            warn.play()
+          }
+          alert(`Too many requests! (Maximum: ${maxQueue})`)
+        }
       }
     }
   })
@@ -50,6 +71,11 @@ const work = async () => {
       duration: 500 * Math.abs(floor - currentFloor),
     }).finished
     elevator.style.transform = `translateY(${-floorHeight * floor}px)`
+
+    if (['true', null].includes(localStorage.getItem('muted'))) {
+      bell.currentTime = 0
+      bell.play()
+    }
 
     queue.shift()
     document.querySelectorAll(`button[data-floor="${floor}"]`).forEach(toggleButtonClasses)
@@ -77,3 +103,13 @@ const toggleButtonClasses = (button: Element) => {
     Array.from(button.children).forEach((child) => child.classList.toggle('fa-inverse'))
   }
 }
+
+document.getElementById('mute')?.addEventListener('click', (event) => {
+  event.preventDefault()
+  const curMuted = localStorage.getItem('muted')
+  localStorage.setItem('muted', (!(curMuted == 'true')).toString())
+
+  const icon = (event.currentTarget as HTMLAnchorElement).children.item(0)
+  icon?.classList.toggle('fa-volume-up')
+  icon?.classList.toggle('fa-volume-mute')
+})

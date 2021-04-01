@@ -49,9 +49,9 @@ are no requests to process.
 
 ## Bonus features
 
--   [ ] User can see a warning sound if the number of elevator requests
+-   [X] User can see a warning sound if the number of elevator requests
 exceeds the maximum number allowed. This limit is left to the developer.
--   [ ] User can hear a sound when the elevator arrives at a floor.
+-   [X] User can hear a sound when the elevator arrives at a floor.
 -   [ ] User can see an occupant randomly arrive at a floor to indicate when
 the user should click the up or down elevator call button on that floor.
 -   [ ] User can specify the time interval between new occupants arriving to
