@@ -104,7 +104,10 @@ const toggleButtonClasses = (button: Element) => {
   }
 }
 
-document.getElementById('mute')?.addEventListener('click', (event) => {
+/* Mute sounds button */
+const muteButton = document.querySelector('#mute') as HTMLAnchorElement | undefined
+
+muteButton?.addEventListener('click', (event) => {
   event.preventDefault()
   const curMuted = localStorage.getItem('muted')
   localStorage.setItem('muted', (!(curMuted == 'true')).toString())
@@ -113,3 +116,5 @@ document.getElementById('mute')?.addEventListener('click', (event) => {
   icon?.classList.toggle('fa-volume-up')
   icon?.classList.toggle('fa-volume-mute')
 })
+
+muteButton?.children.item(0)?.classList.add(localStorage.getItem('muted') == 'false' ? 'fa-volume-mute' : 'fa-volume-up')
