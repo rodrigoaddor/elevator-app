@@ -12940,7 +12940,7 @@ document.querySelectorAll('button[data-floor]').forEach(element => {
           document.querySelectorAll(`button[data-floor="${floor}"]`).forEach(toggleButtonClasses);
           work();
         } else {
-          if (localStorage.getItem('muted') != 'false') {
+          if (['true', null].includes(localStorage.getItem('muted'))) {
             warn.currentTime = 0;
             warn.play();
           }
@@ -12975,7 +12975,7 @@ const work = async () => {
     }).finished;
     elevator.style.transform = `translateY(${-floorHeight * floor}px)`;
 
-    if (localStorage.getItem('muted') != 'false') {
+    if (['true', null].includes(localStorage.getItem('muted'))) {
       bell.currentTime = 0;
       bell.play();
     }
@@ -13014,4 +13014,4 @@ const toggleButtonClasses = button => {
   icon === null || icon === void 0 ? void 0 : icon.classList.toggle('fa-volume-mute');
 });
 },{"./utils":"UnXq","./fontawesome":"opIx","./resources/bell.mp3":"dv5g","./resources/warn.mp3":"cTXt"}]},{},["ZCfc"], null)
-//# sourceMappingURL=main.0fb84845.js.map
+//# sourceMappingURL=main.f1d7b91b.js.map
