@@ -123,11 +123,25 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.delay = void 0;
+exports.random = exports.delay = void 0;
 
 const delay = time => new Promise(res => setTimeout(res, time));
 
 exports.delay = delay;
+
+const random = (min, max, except) => {
+  except = except ? Array.isArray(except) ? except : [except] : [];
+  let num = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  if (except.includes(num)) {
+    const range = max - min;
+    num += num > range / 2 ? -1 : 1;
+  }
+
+  return num;
+};
+
+exports.random = random;
 },{}],"T2ws":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
@@ -12889,7 +12903,7 @@ var _freeSolidSvgIcons = require("@fortawesome/free-solid-svg-icons");
 
 var _freeBrandsSvgIcons = require("@fortawesome/free-brands-svg-icons");
 
-_fontawesomeSvgCore.library.add(_freeSolidSvgIcons.faSort, _freeSolidSvgIcons.faSortUp, _freeSolidSvgIcons.faSortDown, _freeSolidSvgIcons.faSquare, _freeBrandsSvgIcons.faGithub, _freeSolidSvgIcons.faVolumeUp, _freeSolidSvgIcons.faVolumeMute);
+_fontawesomeSvgCore.library.add(_freeSolidSvgIcons.faSort, _freeSolidSvgIcons.faSortUp, _freeSolidSvgIcons.faSortDown, _freeSolidSvgIcons.faSquare, _freeBrandsSvgIcons.faGithub, _freeSolidSvgIcons.faVolumeUp, _freeSolidSvgIcons.faVolumeMute, _freeSolidSvgIcons.faUser, _freeSolidSvgIcons.faUserClock);
 
 _fontawesomeSvgCore.dom.watch();
 },{"@fortawesome/fontawesome-svg-core":"T2ws","@fortawesome/free-solid-svg-icons":"lmHt","@fortawesome/free-brands-svg-icons":"XFr7"}],"dv5g":[function(require,module,exports) {
@@ -12907,7 +12921,7 @@ var _bell = _interopRequireDefault(require("./resources/bell.mp3"));
 
 var _warn = _interopRequireDefault(require("./resources/warn.mp3"));
 
-var _muteButton$children$;
+var _document$querySelect, _muteButton$children$;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12915,13 +12929,16 @@ const bell = new Audio(_bell.default);
 const warn = new Audio(_warn.default);
 const buildingHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--building-height'));
 const floorHeight = buildingHeight / floors;
-const waitTime = 1e3;
+const waitTime = 2e3;
 const returnTime = 5e3;
 const maxQueue = 3;
 const elevator = document.getElementById('elevator');
 const queue = [];
 let working = false;
 let returnTimeout;
+let occupantInterval;
+/* Buttons event handler */
+
 document.querySelectorAll('button[data-floor]').forEach(element => {
   const button = element;
   button.addEventListener('click', async event => {
@@ -12951,6 +12968,7 @@ document.querySelectorAll('button[data-floor]').forEach(element => {
     }
   });
 });
+/* Elevator animation */
 
 const work = async () => {
   if (working) return;
@@ -12982,6 +13000,38 @@ const work = async () => {
 
     queue.shift();
     document.querySelectorAll(`button[data-floor="${floor}"]`).forEach(toggleButtonClasses);
+    setTimeout(async () => {
+      const user = carrying();
+
+      if (user == floor) {
+        var _elevator$children$it, _elevator$children$it2;
+
+        await ((_elevator$children$it = elevator.children.item(0)) === null || _elevator$children$it === void 0 ? void 0 : _elevator$children$it.animate([{
+          transform: 'translateX(119px)',
+          opacity: '0'
+        }], {
+          duration: 500
+        }).finished);
+        (_elevator$children$it2 = elevator.children.item(0)) === null || _elevator$children$it2 === void 0 ? void 0 : _elevator$children$it2.classList.add('hide');
+        elevator.children.item(0).children.item(1).innerHTML = '';
+      }
+
+      const newUser = floorUser(floor);
+
+      if (newUser != undefined) {
+        var _floorDom$children$it, _floorDom$children$it2, _elevator$children$it3;
+
+        const floorDom = document.querySelector(`.floor:nth-child(${floor + 1})`);
+        await ((_floorDom$children$it = floorDom.children.item(1)) === null || _floorDom$children$it === void 0 ? void 0 : _floorDom$children$it.animate([{
+          transform: `translatex(-119px)`
+        }], {
+          duration: 500
+        }).finished);
+        (_floorDom$children$it2 = floorDom.children.item(1)) === null || _floorDom$children$it2 === void 0 ? void 0 : _floorDom$children$it2.classList.add('hide');
+        (_elevator$children$it3 = elevator.children.item(0)) === null || _elevator$children$it3 === void 0 ? void 0 : _elevator$children$it3.classList.remove('hide');
+        elevator.children.item(0).children.item(1).innerHTML = `${newUser == 0 ? 'T' : newUser}`;
+      }
+    }, 200);
     await (0, _utils.delay)(waitTime);
   } while (queue.length > 0);
 
@@ -12996,6 +13046,65 @@ const work = async () => {
 
   working = false;
 };
+
+const randomOccupants = ms => {
+  if (occupantInterval != undefined) {
+    clearInterval(occupantInterval);
+  }
+
+  occupantInterval = setInterval(() => {
+    const curFloor = (0, _utils.random)(0, floors - 1);
+    let targetFloor = (0, _utils.random)(0, floors - 1, curFloor);
+    const floor = document.querySelector(`.floor:nth-child(${curFloor + 1})`);
+
+    if (floor && floorUser(curFloor) == undefined) {
+      floor.children.item(1).classList.remove('hide');
+      floor.querySelector(`.target-floor`).innerHTML = `${targetFloor == 0 ? 'T' : targetFloor}`;
+      setTimeout(async () => {
+        if (+elevator.dataset.floor == curFloor && carrying() == undefined) {
+          var _floor$children$item, _floor$children$item2, _elevator$children$it4;
+
+          await ((_floor$children$item = floor.children.item(1)) === null || _floor$children$item === void 0 ? void 0 : _floor$children$item.animate([{
+            transform: `translatex(-119px)`
+          }], {
+            duration: 500
+          }).finished);
+          (_floor$children$item2 = floor.children.item(1)) === null || _floor$children$item2 === void 0 ? void 0 : _floor$children$item2.classList.add('hide');
+          (_elevator$children$it4 = elevator.children.item(0)) === null || _elevator$children$it4 === void 0 ? void 0 : _elevator$children$it4.classList.remove('hide');
+          elevator.children.item(0).children.item(1).innerHTML = `${targetFloor == 0 ? 'T' : targetFloor}`;
+        }
+      }, 500);
+    }
+  }, ms);
+};
+
+(_document$querySelect = document.querySelector('#occupantTime')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.addEventListener('click', event => {
+  event.preventDefault();
+  const time = parseFloat(prompt('Enter the time in seconds between occupants arrivals (0 to disable)'));
+
+  if (!isNaN(time)) {
+    if (time > 0) {
+      randomOccupants(time * 1000);
+    } else {
+      clearInterval(occupantInterval);
+    }
+  } else {
+    alert('Invalid time!');
+  }
+});
+
+const carrying = () => {
+  const user = document.querySelector('#elevator > div:not(.hide) > :last-child');
+  return user ? +user.innerHTML : undefined;
+};
+
+const floorUser = floor => {
+  const user = document.querySelector(`.floor:nth-child(${floor + 1}) > div:not(.hide) > :last-child`);
+  return user ? +user.innerHTML : undefined;
+};
+
+window.carrying = carrying;
+window.floorUser = floorUser;
 
 const toggleButtonClasses = button => {
   if (!button.classList.contains('icon-button')) {
@@ -13018,4 +13127,4 @@ muteButton === null || muteButton === void 0 ? void 0 : muteButton.addEventListe
 });
 muteButton === null || muteButton === void 0 ? void 0 : (_muteButton$children$ = muteButton.children.item(0)) === null || _muteButton$children$ === void 0 ? void 0 : _muteButton$children$.classList.add(localStorage.getItem('muted') == 'false' ? 'fa-volume-mute' : 'fa-volume-up');
 },{"./utils":"UnXq","./fontawesome":"opIx","./resources/bell.mp3":"dv5g","./resources/warn.mp3":"cTXt"}]},{},["ZCfc"], null)
-//# sourceMappingURL=main.0f9339ed.js.map
+//# sourceMappingURL=main.62ea2896.js.map

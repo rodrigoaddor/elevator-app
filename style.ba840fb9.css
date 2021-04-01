@@ -984,7 +984,9 @@ img {
   border-bottom: 10px solid #888;
   flex-grow: 1;
   display: flex;
-  place-items: center;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
 }
 .building .elevator-shaft {
   display: flex;
@@ -996,7 +998,11 @@ img {
   width: 50px;
   height: calc(var(--building-height) / var(--floors) - 10px);
   margin-bottom: 10px;
-  background-color: red;
+  background-color: white;
+  border: 2px solid #757575;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .buttons {
@@ -1048,4 +1054,8 @@ button.icon-button:focus {
   margin-left: 1rem;
 }
 
-/*# sourceMappingURL=style.85cf73a4.css.map */
+.hide {
+  display: none;
+}
+
+/*# sourceMappingURL=style.ba840fb9.css.map */
