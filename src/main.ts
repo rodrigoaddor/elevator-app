@@ -160,12 +160,12 @@ document.querySelector('#occupantTime')?.addEventListener('click', (event) => {
 
 const carrying = (): number | undefined => {
   const user = document.querySelector('#elevator > div:not(.hide) > :last-child')
-  return user ? +user.innerHTML : undefined
+  return user ? +(user.innerHTML == 'T' ? 0 : user.innerHTML) : undefined
 }
 
 const floorUser = (floor: number): number | undefined => {
   const user = document.querySelector(`.floor:nth-child(${floor + 1}) > div:not(.hide) > :last-child`)
-  return user ? +user.innerHTML : undefined
+  return user ? +(user.innerHTML == 'T' ? 0 : user.innerHTML) : undefined
 }
 
 window.carrying = carrying
