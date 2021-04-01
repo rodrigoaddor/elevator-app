@@ -12907,7 +12907,7 @@ var _bell = _interopRequireDefault(require("./resources/bell.mp3"));
 
 var _warn = _interopRequireDefault(require("./resources/warn.mp3"));
 
-var _document$getElementB;
+var _muteButton$children$;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13004,8 +13004,11 @@ const toggleButtonClasses = button => {
     Array.from(button.children).forEach(child => child.classList.toggle('fa-inverse'));
   }
 };
+/* Mute sounds button */
 
-(_document$getElementB = document.getElementById('mute')) === null || _document$getElementB === void 0 ? void 0 : _document$getElementB.addEventListener('click', event => {
+
+const muteButton = document.querySelector('#mute');
+muteButton === null || muteButton === void 0 ? void 0 : muteButton.addEventListener('click', event => {
   event.preventDefault();
   const curMuted = localStorage.getItem('muted');
   localStorage.setItem('muted', (!(curMuted == 'true')).toString());
@@ -13013,5 +13016,6 @@ const toggleButtonClasses = button => {
   icon === null || icon === void 0 ? void 0 : icon.classList.toggle('fa-volume-up');
   icon === null || icon === void 0 ? void 0 : icon.classList.toggle('fa-volume-mute');
 });
+muteButton === null || muteButton === void 0 ? void 0 : (_muteButton$children$ = muteButton.children.item(0)) === null || _muteButton$children$ === void 0 ? void 0 : _muteButton$children$.classList.add(localStorage.getItem('muted') == 'false' ? 'fa-volume-mute' : 'fa-volume-up');
 },{"./utils":"UnXq","./fontawesome":"opIx","./resources/bell.mp3":"dv5g","./resources/warn.mp3":"cTXt"}]},{},["ZCfc"], null)
-//# sourceMappingURL=main.f1d7b91b.js.map
+//# sourceMappingURL=main.0f9339ed.js.map
