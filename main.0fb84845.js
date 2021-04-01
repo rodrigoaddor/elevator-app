@@ -12883,34 +12883,41 @@ exports.fab = _iconsCache;
 },{}],"opIx":[function(require,module,exports) {
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.refreshIcons = void 0;
-
 var _fontawesomeSvgCore = require("@fortawesome/fontawesome-svg-core");
 
 var _freeSolidSvgIcons = require("@fortawesome/free-solid-svg-icons");
 
 var _freeBrandsSvgIcons = require("@fortawesome/free-brands-svg-icons");
 
-_fontawesomeSvgCore.library.add(_freeSolidSvgIcons.faSort, _freeSolidSvgIcons.faSortUp, _freeSolidSvgIcons.faSortDown, _freeSolidSvgIcons.faSquare, _freeBrandsSvgIcons.faGithub);
+_fontawesomeSvgCore.library.add(_freeSolidSvgIcons.faSort, _freeSolidSvgIcons.faSortUp, _freeSolidSvgIcons.faSortDown, _freeSolidSvgIcons.faSquare, _freeBrandsSvgIcons.faGithub, _freeSolidSvgIcons.faVolumeUp, _freeSolidSvgIcons.faVolumeMute);
 
-_fontawesomeSvgCore.dom.i2svg();
-
-const refreshIcons = _fontawesomeSvgCore.dom.i2svg;
-exports.refreshIcons = refreshIcons;
-},{"@fortawesome/fontawesome-svg-core":"T2ws","@fortawesome/free-solid-svg-icons":"lmHt","@fortawesome/free-brands-svg-icons":"XFr7"}],"ZCfc":[function(require,module,exports) {
+_fontawesomeSvgCore.dom.watch();
+},{"@fortawesome/fontawesome-svg-core":"T2ws","@fortawesome/free-solid-svg-icons":"lmHt","@fortawesome/free-brands-svg-icons":"XFr7"}],"dv5g":[function(require,module,exports) {
+module.exports = "bell.07057762.mp3";
+},{}],"cTXt":[function(require,module,exports) {
+module.exports = "warn.5b1645c7.mp3";
+},{}],"ZCfc":[function(require,module,exports) {
 "use strict";
 
 var _utils = require("./utils");
 
 require("./fontawesome");
 
+var _bell = _interopRequireDefault(require("./resources/bell.mp3"));
+
+var _warn = _interopRequireDefault(require("./resources/warn.mp3"));
+
+var _document$getElementB;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const bell = new Audio(_bell.default);
+const warn = new Audio(_warn.default);
 const buildingHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--building-height'));
 const floorHeight = buildingHeight / floors;
 const waitTime = 1e3;
 const returnTime = 5e3;
+const maxQueue = 3;
 const elevator = document.getElementById('elevator');
 const queue = [];
 let working = false;
@@ -12928,9 +12935,18 @@ document.querySelectorAll('button[data-floor]').forEach(element => {
       const currentFloor = parseInt((_elevator$dataset$flo = elevator.dataset.floor) !== null && _elevator$dataset$flo !== void 0 ? _elevator$dataset$flo : '0');
 
       if (currentFloor != floor && !queue.includes(floor)) {
-        queue.push(floor);
-        document.querySelectorAll(`button[data-floor="${floor}"]`).forEach(toggleButtonClasses);
-        work();
+        if (queue.length + 1 <= maxQueue) {
+          queue.push(floor);
+          document.querySelectorAll(`button[data-floor="${floor}"]`).forEach(toggleButtonClasses);
+          work();
+        } else {
+          if (localStorage.getItem('muted') != 'false') {
+            warn.currentTime = 0;
+            warn.play();
+          }
+
+          alert(`Too many requests! (Maximum: ${maxQueue})`);
+        }
       }
     }
   });
@@ -12958,6 +12974,12 @@ const work = async () => {
       duration: 500 * Math.abs(floor - currentFloor)
     }).finished;
     elevator.style.transform = `translateY(${-floorHeight * floor}px)`;
+
+    if (localStorage.getItem('muted') != 'false') {
+      bell.currentTime = 0;
+      bell.play();
+    }
+
     queue.shift();
     document.querySelectorAll(`button[data-floor="${floor}"]`).forEach(toggleButtonClasses);
     await (0, _utils.delay)(waitTime);
@@ -12982,5 +13004,14 @@ const toggleButtonClasses = button => {
     Array.from(button.children).forEach(child => child.classList.toggle('fa-inverse'));
   }
 };
-},{"./utils":"UnXq","./fontawesome":"opIx"}]},{},["ZCfc"], null)
-//# sourceMappingURL=main.4f21c3cb.js.map
+
+(_document$getElementB = document.getElementById('mute')) === null || _document$getElementB === void 0 ? void 0 : _document$getElementB.addEventListener('click', event => {
+  event.preventDefault();
+  const curMuted = localStorage.getItem('muted');
+  localStorage.setItem('muted', (!(curMuted == 'true')).toString());
+  const icon = event.currentTarget.children.item(0);
+  icon === null || icon === void 0 ? void 0 : icon.classList.toggle('fa-volume-up');
+  icon === null || icon === void 0 ? void 0 : icon.classList.toggle('fa-volume-mute');
+});
+},{"./utils":"UnXq","./fontawesome":"opIx","./resources/bell.mp3":"dv5g","./resources/warn.mp3":"cTXt"}]},{},["ZCfc"], null)
+//# sourceMappingURL=main.0fb84845.js.map

@@ -957,6 +957,9 @@ img {
   display: flex;
   justify-content: flex-end;
 }
+.header nav > * {
+  margin-left: 3rem;
+}
 
 .building {
   grid-area: building;
@@ -1024,12 +1027,7 @@ button:hover.icon-button {
   color: rgba(155, 77, 202, 0.5) !important;
 }
 
-button:focus {
-  border-color: var(--button-color) !important;
-  color: white !important;
-  background-color: #9b4dca !important;
-}
-button:focus.icon-button {
+button.icon-button:focus {
   background-color: initial !important;
   color: #9b4dca !important;
 }
@@ -1050,4 +1048,4 @@ button:focus.icon-button {
   margin-left: 1rem;
 }
 
-/*# sourceMappingURL=style.93b05d16.css.map */
+/*# sourceMappingURL=style.85cf73a4.css.map */
