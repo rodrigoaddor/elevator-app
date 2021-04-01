@@ -20,8 +20,12 @@ html(lang='en')
       .header
         h3 Elevator App
         nav
+          a#occupantTime(href="#")
+            i.fas.fa-user-clock
+            span.icon-text Occupant Interval
+
           a#mute(href="#")
-            i.fas.fa-volume-up.fa-lg
+            i.fas.fa-lg
             span.icon-text Sound
 
           a(href="https://github.com/rodrigoaddor/elevator-app")
@@ -30,13 +34,21 @@ html(lang='en')
 
       .building
         .elevator-shaft
-          #elevator
+          #elevator(data-floor=0)
+            .fa-layers.fa-fw.fa-stack.hide
+                i.fas.fa-user.fa-stack-1x(data-fa-transform="grow-13")
+                span.fa-layers-text.fa-inverse(data-fa-transform="shrink-7 down-9")
+
         .floors
           each _, i in Array(floors)
             .floor
               button.icon-button.fa-stack(data-floor=i)
                 i.fas.fa-square.fa-stack-2x.fa-inverse
-                i.fas.fa-stack-1x(class=i == 0 ? 'fa-sort-up' : i == floors - 1 ? 'fa-sort-down' : 'fa-sort')   
+                i.fas.fa-stack-1x(class=i == 0 ? 'fa-sort-up' : i == floors - 1 ? 'fa-sort-down' : 'fa-sort')
+              
+              .fa-layers.fa-fw.fa-stack.hide
+                i.fas.fa-user.fa-stack-1x(data-fa-transform="grow-13")
+                span.fa-layers-text.fa-inverse.target-floor(data-fa-transform="shrink-7 down-9")
       .buttons
         each _, i in Array(floors)
           button.button.button-outline(data-floor=i) #{i == 0 ? 'T' : i }

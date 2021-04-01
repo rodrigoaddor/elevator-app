@@ -52,9 +52,9 @@ are no requests to process.
 -   [X] User can see a warning sound if the number of elevator requests
 exceeds the maximum number allowed. This limit is left to the developer.
 -   [X] User can hear a sound when the elevator arrives at a floor.
--   [ ] User can see an occupant randomly arrive at a floor to indicate when
+-   [X] User can see an occupant randomly arrive at a floor to indicate when
 the user should click the up or down elevator call button on that floor.
--   [ ] User can specify the time interval between new occupants arriving to
+-   [X] User can specify the time interval between new occupants arriving to
 call an elevator.
 
 ## Useful links and resources

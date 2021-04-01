@@ -1,4 +1,4 @@
-import { delay } from './utils'
+import { delay, random } from './utils'
 import './fontawesome'
 
 /* Sounds */
@@ -11,22 +11,22 @@ import warnUrl from './resources/warn.mp3'
 const bell = new Audio(bellUrl)
 const warn = new Audio(warnUrl)
 
-/*  */
-
+/* Constants */
 declare var floors: number
 const buildingHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--building-height'))
 const floorHeight = buildingHeight / floors
 
-const waitTime = 1e3
+const waitTime = 2e3
 const returnTime = 5e3
 const maxQueue = 3
 
 const elevator = document.getElementById('elevator') as HTMLDivElement
 const queue: number[] = []
 let working = false
-
 let returnTimeout: number | undefined
+let occupantInterval: number | undefined
 
+/* Buttons event handler */
 document.querySelectorAll('button[data-floor]').forEach((element) => {
   const button = element as HTMLButtonElement
   button.addEventListener('click', async (event) => {
@@ -54,6 +54,7 @@ document.querySelectorAll('button[data-floor]').forEach((element) => {
   })
 })
 
+/* Elevator animation */
 const work = async () => {
   if (working) return
   working = true
@@ -80,6 +81,26 @@ const work = async () => {
     queue.shift()
     document.querySelectorAll(`button[data-floor="${floor}"]`).forEach(toggleButtonClasses)
 
+    setTimeout(async () => {
+      const user = carrying()
+      if (user == floor) {
+        await elevator.children.item(0)?.animate([{ transform: 'translateX(119px)', opacity: '0' }], { duration: 500 }).finished
+
+        elevator.children.item(0)?.classList.add('hide')
+        elevator.children.item(0)!.children.item(1)!.innerHTML = ''
+      }
+
+      const newUser = floorUser(floor)
+      if (newUser != undefined) {
+        const floorDom = document.querySelector(`.floor:nth-child(${floor + 1})`)!
+        await floorDom.children.item(1)?.animate([{ transform: `translatex(-119px)` }], { duration: 500 }).finished
+        floorDom.children.item(1)?.classList.add('hide')
+
+        elevator.children.item(0)?.classList.remove('hide')
+        elevator.children.item(0)!.children.item(1)!.innerHTML = `${newUser == 0 ? 'T' : newUser}`
+      }
+    }, 200)
+
     await delay(waitTime)
   } while (queue.length > 0)
 
@@ -95,6 +116,60 @@ const work = async () => {
 
   working = false
 }
+
+const randomOccupants = (ms: number) => {
+  if (occupantInterval != undefined) {
+    clearInterval(occupantInterval)
+  }
+
+  occupantInterval = setInterval(() => {
+    const curFloor = random(0, floors - 1)
+    let targetFloor = random(0, floors - 1, curFloor)
+
+    const floor = document.querySelector(`.floor:nth-child(${curFloor + 1})`)
+    if (floor && floorUser(curFloor) == undefined) {
+      floor.children.item(1)!.classList.remove('hide')
+      floor.querySelector(`.target-floor`)!.innerHTML = `${targetFloor == 0 ? 'T' : targetFloor}`
+
+      setTimeout(async () => {
+        if (+elevator.dataset.floor! == curFloor && carrying() == undefined) {
+          await floor.children.item(1)?.animate([{ transform: `translatex(-119px)` }], { duration: 500 }).finished
+          floor.children.item(1)?.classList.add('hide')
+
+          elevator.children.item(0)?.classList.remove('hide')
+          elevator.children.item(0)!.children.item(1)!.innerHTML = `${targetFloor == 0 ? 'T' : targetFloor}`
+        }
+      }, 500)
+    }
+  }, ms)
+}
+
+document.querySelector('#occupantTime')?.addEventListener('click', (event) => {
+  event.preventDefault()
+  const time = parseFloat(prompt('Enter the time in seconds between occupants arrivals (0 to disable)')!)
+  if (!isNaN(time)) {
+    if (time > 0) {
+      randomOccupants(time * 1000)
+    } else {
+      clearInterval(occupantInterval)
+    }
+  } else {
+    alert('Invalid time!')
+  }
+})
+
+const carrying = (): number | undefined => {
+  const user = document.querySelector('#elevator > div:not(.hide) > :last-child')
+  return user ? +user.innerHTML : undefined
+}
+
+const floorUser = (floor: number): number | undefined => {
+  const user = document.querySelector(`.floor:nth-child(${floor + 1}) > div:not(.hide) > :last-child`)
+  return user ? +user.innerHTML : undefined
+}
+
+window.carrying = carrying
+window.floorUser = floorUser
 
 const toggleButtonClasses = (button: Element) => {
   if (!button.classList.contains('icon-button')) {
